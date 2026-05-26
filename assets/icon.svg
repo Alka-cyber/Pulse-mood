@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Pulse Board icon">
+  <rect width="512" height="512" rx="72" fill="#167a7f"/>
+  <path d="M112 298h68l38-94 72 174 52-128h58" fill="none" stroke="#ffffff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="356" cy="158" r="42" fill="#f0b548"/>
+  <circle cx="156" cy="156" r="28" fill="#f6f8f4" opacity="0.92"/>
+</svg>

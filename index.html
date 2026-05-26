@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#167a7f">
+    <meta name="description" content="A local-first daily wellbeing dashboard and mood tracker.">
+    <title>Pulse Board | Daily Wellbeing Tracker</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div>
+            <p class="eyebrow">Daily Wellbeing</p>
+            <h1>Pulse Board</h1>
+          </div>
+        </div>
+        <div class="top-actions" aria-label="App actions">
+          <button class="ghost-button" id="installBtn" type="button" hidden>Install</button>
+          <button class="ghost-button" id="backupBtn" type="button">Backup</button>
+          <label class="ghost-button file-button" for="restoreInput">
+            Restore
+            <input id="restoreInput" type="file" accept="application/json">
+          </label>
+          <button class="primary-button" id="saveBtn" type="button">Save Entry</button>
+        </div>
+      </header>
+
+      <nav class="view-tabs" aria-label="Main views">
+        <button id="entryTabBtn" type="button" data-active="true">Entry</button>
+        <button id="statsTabBtn" type="button">Stats & Analytics</button>
+      </nav>
+
+      <main aria-live="polite">
+        <section class="view-panel entry-view" id="entryView">
+          <section class="panel score-panel" aria-labelledby="scoreTitle">
+            <div class="score-ring" id="scoreRing" style="--score: 74">
+              <span id="scoreValue">74</span>
+              <small>score</small>
+            </div>
+            <div>
+              <p class="eyebrow">Live dashboard</p>
+              <h2 id="scoreTitle">Balanced day</h2>
+              <p class="score-copy" id="scoreCopy">Your current inputs are trending steady.</p>
+            </div>
+          </section>
+
+          <section class="panel checkin-panel" aria-labelledby="checkinTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Check-in</p>
+                <h2 id="checkinTitle">Log entry</h2>
+              </div>
+              <input class="date-input" id="entryDate" type="date" aria-label="Entry date">
+            </div>
+
+            <form id="trackerForm" class="tracker-form">
+              <section class="mood-panel" aria-labelledby="moodSlotsTitle">
+                <div class="subheading-row">
+                  <div>
+                    <p class="eyebrow">Mood tracker</p>
+                    <h3 id="moodSlotsTitle">Morning, afternoon, evening, night</h3>
+                  </div>
+                  <button class="ghost-button compact-button" id="pinMoodBtn" type="button">Pin mood</button>
+                </div>
+
+                <div class="slot-grid" id="slotGrid" aria-label="Daily mood slots"></div>
+                <div class="selected-moods" id="selectedMoodRow" aria-label="Selected moods"></div>
+                <div class="quick-row" id="quickMoodRow" aria-label="Pinned moods"></div>
+                <div class="group-tabs" id="groupTabs" aria-label="Mood groups"></div>
+                <div class="mood-grid" id="moodGrid" aria-label="Mood choices"></div>
+                <label class="slot-note-field">
+                  <span id="slotNoteLabel">Morning note</span>
+                  <textarea id="slotNote" rows="2" placeholder="A quick note for this time of day"></textarea>
+                </label>
+              </section>
+
+              <div class="entry-grid">
+                <section class="form-block" aria-labelledby="energyTitle">
+                  <div class="subheading-row compact-heading">
+                    <h3 id="energyTitle">Energy level</h3>
+                    <strong id="energyLevelValue">Normal</strong>
+                  </div>
+                  <label class="three-range">
+                    <input id="energyLevel" type="range" min="0" max="2" step="1" value="1">
+                    <span><b>Low</b><b>Normal</b><b>High</b></span>
+                  </label>
+                </section>
+
+                <section class="form-block" aria-labelledby="stressTitle">
+                  <div class="subheading-row compact-heading">
+                    <h3 id="stressTitle">Stress</h3>
+                    <strong id="stressValue">4</strong>
+                  </div>
+                  <input id="stress" name="stress" type="range" min="1" max="10" value="4">
+                </section>
+              </div>
+
+              <div class="number-grid">
+                <label>
+                  <span>Sleep</span>
+                  <input id="sleep" name="sleep" type="number" min="0" max="24" step="0.25" value="7.5">
+                  <small>hours</small>
+                </label>
+                <label>
+                  <span>Water</span>
+                  <input id="water" name="water" type="number" min="0" max="30" step="1" value="7">
+                  <small>glasses</small>
+                </label>
+                <label>
+                  <span>Mindful</span>
+                  <input id="mindful" name="mindful" type="number" min="0" max="180" step="5" value="10">
+                  <small>minutes</small>
+                </label>
+                <label>
+                  <span>Walks</span>
+                  <input id="steps" name="steps" type="number" min="0" max="100000" step="100" value="0">
+                  <small>steps</small>
+                </label>
+              </div>
+
+              <fieldset class="habit-fieldset">
+                <legend>Habits and signals</legend>
+                <label><input type="checkbox" name="habit" value="sunlight">Sunlight 15+ mins</label>
+                <label><input type="checkbox" name="habit" value="selfCritical">Self critical</label>
+                <label><input type="checkbox" name="habit" value="news">News 15+ mins</label>
+                <label><input type="checkbox" name="habit" value="periods">Periods</label>
+                <label><input type="checkbox" name="habit" value="crying">Crying</label>
+                <label><input type="checkbox" name="habit" value="music">Listening music</label>
+                <label><input type="checkbox" name="habit" value="exerciseGym">Exercise / gym</label>
+                <label><input type="checkbox" name="habit" value="walks">Walks</label>
+              </fieldset>
+
+              <label class="notes-field">
+                <span>Daily note</span>
+                <textarea id="notes" name="notes" rows="4" placeholder="Signals, context, symptoms, reflection"></textarea>
+              </label>
+
+              <button class="primary-button save-wide" id="saveEntryBtn" type="button">Save Entry</button>
+            </form>
+          </section>
+        </section>
+
+        <section class="view-panel stats-view" id="statsView" hidden>
+          <section class="metric-grid" aria-label="Wellbeing summary">
+            <article class="metric-card">
+              <span>Streak</span>
+              <strong id="streakValue">0</strong>
+              <small>days checked in</small>
+            </article>
+            <article class="metric-card">
+              <span>7 day avg</span>
+              <strong id="avgValue">0</strong>
+              <small>wellbeing score</small>
+            </article>
+            <article class="metric-card">
+              <span>This month</span>
+              <strong id="monthValue">0</strong>
+              <small>entries saved</small>
+            </article>
+            <article class="metric-card">
+              <span>Best lever</span>
+              <strong id="leverValue">Mood</strong>
+              <small id="leverHint">Name the feeling</small>
+            </article>
+          </section>
+
+          <section class="panel chart-panel" aria-labelledby="clusterTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Emotion map</p>
+                <h2 id="clusterTitle">Cluster plot</h2>
+              </div>
+              <div class="segmented-control three" aria-label="Cluster period">
+                <button id="weekModeBtn" type="button">Week</button>
+                <button id="monthModeBtn" type="button" data-active="true">Month</button>
+                <button id="yearModeBtn" type="button">Year</button>
+              </div>
+            </div>
+            <div class="chart-wrap cluster-wrap">
+              <canvas id="clusterChart" width="900" height="460" aria-label="Emotion cluster chart"></canvas>
+            </div>
+          </section>
+
+          <section class="analytics-row">
+            <section class="panel analytics-panel" aria-labelledby="patternTitle">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Pattern</p>
+                  <h2 id="patternTitle">Mood mix</h2>
+                </div>
+              </div>
+              <div class="pattern-layout">
+                <canvas id="patternChart" width="420" height="300" aria-label="Mood pattern chart"></canvas>
+                <div class="mood-bars" id="moodBars"></div>
+              </div>
+            </section>
+
+            <section class="panel analytics-panel" aria-labelledby="energyPatternTitle">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Energy</p>
+                  <h2 id="energyPatternTitle">Energy mix</h2>
+                </div>
+              </div>
+              <div class="mood-bars" id="energyBars"></div>
+              <div class="metric-bars" id="metricBars"></div>
+            </section>
+          </section>
+
+          <section class="panel calendar-panel" aria-labelledby="calendarTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Calendar</p>
+                <h2 id="calendarTitle">May 2026</h2>
+              </div>
+              <div class="icon-actions">
+                <button class="icon-button" id="prevMonthBtn" type="button" aria-label="Previous month">&lt;</button>
+                <button class="icon-button" id="nextMonthBtn" type="button" aria-label="Next month">&gt;</button>
+              </div>
+            </div>
+            <div class="month-calendar" id="monthCalendar" aria-label="Monthly calendar"></div>
+          </section>
+
+          <section class="analytics-row">
+            <section class="panel feed-panel" aria-labelledby="feedTitle">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Feed</p>
+                  <h2 id="feedTitle">Recent logs</h2>
+                </div>
+                <button class="ghost-button" id="csvBtn" type="button">CSV</button>
+              </div>
+              <div class="feed-list" id="feedList"></div>
+            </section>
+
+            <section class="panel insight-panel" aria-labelledby="insightTitle">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Signals</p>
+                  <h2 id="insightTitle">Richer patterns</h2>
+                </div>
+              </div>
+              <div class="insight-list" id="insightList"></div>
+            </section>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
